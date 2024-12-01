@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GraphQLService {
 
-    private ApolloClient apolloClient;
+    private final ApolloClient apolloClient;
 
     public GraphQLService() {
         apolloClient = new ApolloClient.Builder()

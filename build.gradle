@@ -9,15 +9,13 @@ plugins {
     id 'java'
     id 'java-library'
     id 'application'
-    id "net.ltgt.errorprone" version "4.0.1"
-    id 'org.openjfx.javafxplugin' version '0.1.0' // JavaFX plugin for Gradle
     id "com.github.ben-manes.versions" version "0.51.0"
-    id 'com.apollographql.apollo' version '4.0.0' // Apply the Apollo plugin
+    id 'com.apollographql.apollo' version '4.1.0' // Apply the Apollo plugin
 }
 
-group = 'com.example'
+group = 'com.github.xhea1'
 version = '1.0.0'
-java{
+java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
     toolchain {
@@ -25,7 +23,9 @@ java{
     }
 }
 
-mainClassName = 'com.example.MainApp'
+application {
+    mainClass = 'com.github.xhea1.app.MainApp'
+}
 
 repositories {
     mavenCentral()
@@ -33,42 +33,29 @@ repositories {
 }
 
 dependencies {
-    // JavaFX dependencies
-    implementation 'org.openjfx:javafx-controls:21.0.4'
-    implementation 'org.openjfx:javafx-fxml:21.0.4'
-    implementation 'org.openjfx:javafx-media:21.0.4'
-
-    // OpenCV dependency (using JavaCV)
-    implementation 'org.bytedeco:javacv-platform:1.5.10'
-    implementation 'org.bytedeco:opencv-platform:4.9.0-1.5.10'
-
-    // DeepLearning4J core dependency
-    implementation 'org.deeplearning4j:deeplearning4j-core:1.0.0-beta7'
-
-    // ND4J native platform dependency (handles the computation backend)
-    implementation 'org.nd4j:nd4j-native-platform:1.0.0-beta7'
 
     // Apollo GraphQL Client dependencies
-    implementation 'com.apollographql.apollo:apollo-runtime:4.0.0'
-    implementation 'com.apollographql.apollo:apollo-api:4.0.0'
-    implementation 'com.apollographql.apollo:apollo-rx3-support:4.0.0'
+    def apolloVersion = '4.1.0'
+    implementation "com.apollographql.apollo:apollo-runtime:$apolloVersion"
+    implementation "com.apollographql.apollo:apollo-api:$apolloVersion"
+    implementation "com.apollographql.apollo:apollo-rx3-support:$apolloVersion"
 
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    implementation 'com.google.guava:guava:33.3.0-jre'
+    implementation 'com.google.guava:guava:33.3.1-jre'
 
-    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.24.1'
 
-    errorprone "com.uber.nullaway:nullaway:0.11.2"
+    implementation 'info.picocli:picocli:4.7.6'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.4'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+
     api "org.jspecify:jspecify:1.0.0"
-    errorprone "com.google.errorprone:error_prone_core:2.30.0"
 
     // Testing dependencies
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
-}
-
-javafx {
-    version = '21.0.4'
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.media']
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
 }
 
 test {
@@ -85,7 +72,12 @@ apollo {
             connectToJavaSourceSet('main')
         }
 
+        // Explicitly set the schema
+        schemaFiles.from("src/main/graphql/stash/schema.graphqls")
+        schemaFiles.from("src/main/graphql/stash/types/")
         useSemanticNaming.set(true)
+        warnOnDeprecatedUsages.set(true)
+        generateApolloMetadata.set(true)
     }
     // Make IDEA aware of codegen and run it during your Gradle Sync
     generateSourcesDuringGradleSync.set(true)
@@ -95,6 +87,8 @@ apollo {
 tasks.register('downloadSchema') {
     def schemaUrl = "https://raw.githubusercontent.com/stashapp/stash/$stashVersion/graphql/schema/schema.graphql"
     def schemaFile = file("src/main/graphql/stash/schema.graphqls")
+    inputs.property("stashVersion", stashVersion)
+    outputs.file(schemaFile)
 
     doLast {
         println "Downloading GraphQL schema from GitHub..."
@@ -109,6 +103,9 @@ import groovy.json.JsonSlurper;
 // Task to download GraphQL types from GitHub dynamically
 tasks.register('downloadTypes') {
     def typesDir = file("src/main/graphql/stash/types")
+    mustRunAfter(tasks.named('downloadSchema'))
+    inputs.property("stashVersion", stashVersion)
+    outputs.dir(typesDir)
 
     doLast {
         println "Downloading GraphQL types from GitHub..."
@@ -144,23 +141,10 @@ tasks.register('downloadTypes') {
 
 // Ensure both schema and types are downloaded before generating Apollo sources
 generateApolloSources.dependsOn downloadSchema, downloadTypes
-
-import net.ltgt.gradle.errorprone.CheckSeverity
-
-// configure NullAway
-tasks.withType(JavaCompile).configureEach {
-    // do not run NullAway on test code
-    if (!name.toLowerCase().contains("test")) {
-        options.errorprone {
-            check("NullAway", CheckSeverity.ERROR)
-            option("NullAway:AnnotatedPackages", "com.github.xhea1")
-        }
-    }
-    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
-}
+generateStashApolloSources.dependsOn downloadSchema, downloadTypes
+generateStashApolloCodegenSchema.dependsOn downloadSchema, downloadTypes
 
 // dependency updates configuration:
-
 def isNonStable = { String version ->
     def stableKeyword = ['RELEASE', 'FINAL', 'GA', 'JRE'].any { it -> version.toUpperCase().contains(it) }
     def regex = /^[0-9,.v-]+(-r)?$/

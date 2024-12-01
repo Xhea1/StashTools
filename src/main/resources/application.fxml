@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<?import javafx.scene.image.ImageView?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController" spacing="10" alignment="CENTER" >
+    <Button text="Load Image" onAction="#onLoadImage"/>
+    <ImageView fx:id="imageView" fitWidth="400" preserveRatio="true"/>
+</VBox>

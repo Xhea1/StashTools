@@ -10,7 +10,6 @@ plugins {
     id 'java-library'
     id 'application'
     id "com.github.ben-manes.versions" version "0.51.0"
-    id 'com.apollographql.apollo' version '4.1.0' // Apply the Apollo plugin
 }
 
 group = 'com.github.xhea1'
@@ -34,11 +33,7 @@ repositories {
 
 dependencies {
 
-    // Apollo GraphQL Client dependencies
-    def apolloVersion = '4.1.0'
-    implementation "com.apollographql.apollo:apollo-runtime:$apolloVersion"
-    implementation "com.apollographql.apollo:apollo-api:$apolloVersion"
-    implementation "com.apollographql.apollo:apollo-rx3-support:$apolloVersion"
+    implementation 'com.graphql-java:graphql-java:22.3'
 
     // https://mvnrepository.com/artifact/com.google.guava/guava
     implementation 'com.google.guava:guava:33.3.1-jre'
@@ -62,31 +57,10 @@ test {
     useJUnitPlatform()
 }
 
-// Apollo plugin configuration
-apollo {
-    service("stash") {
-        packageName.set('com.github.xhea1.graphql')
-        srcDir(file('src/main/graphql/stash'))
-
-        outputDirConnection {
-            connectToJavaSourceSet('main')
-        }
-
-        // Explicitly set the schema
-        schemaFiles.from("src/main/graphql/stash/schema.graphqls")
-        schemaFiles.from("src/main/graphql/stash/types/")
-        useSemanticNaming.set(true)
-        warnOnDeprecatedUsages.set(true)
-        generateApolloMetadata.set(true)
-    }
-    // Make IDEA aware of codegen and run it during your Gradle Sync
-    generateSourcesDuringGradleSync.set(true)
-}
-
 // Task to download GraphQL schema from a GitHub repository
 tasks.register('downloadSchema') {
     def schemaUrl = "https://raw.githubusercontent.com/stashapp/stash/$stashVersion/graphql/schema/schema.graphql"
-    def schemaFile = file("src/main/graphql/stash/schema.graphqls")
+    def schemaFile = file("graphql/stash/schema.graphqls")
     inputs.property("stashVersion", stashVersion)
     outputs.file(schemaFile)
 
@@ -102,7 +76,7 @@ import groovy.json.JsonSlurper;
 
 // Task to download GraphQL types from GitHub dynamically
 tasks.register('downloadTypes') {
-    def typesDir = file("src/main/graphql/stash/types")
+    def typesDir = file("graphql/stash/types")
     mustRunAfter(tasks.named('downloadSchema'))
     inputs.property("stashVersion", stashVersion)
     outputs.dir(typesDir)
@@ -139,10 +113,6 @@ tasks.register('downloadTypes') {
     }
 }
 
-// Ensure both schema and types are downloaded before generating Apollo sources
-generateApolloSources.dependsOn downloadSchema, downloadTypes
-generateStashApolloSources.dependsOn downloadSchema, downloadTypes
-generateStashApolloCodegenSchema.dependsOn downloadSchema, downloadTypes
 
 // dependency updates configuration:
 def isNonStable = { String version ->

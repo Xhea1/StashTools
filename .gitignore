@@ -44,3 +44,4 @@ bin/
 ## GraphQL files - these are downloaded from github during the build and should not be checked in
 /src/main/graphql/stash/types/
 /src/main/graphql/stash/schema.graphqls
+/graphql/

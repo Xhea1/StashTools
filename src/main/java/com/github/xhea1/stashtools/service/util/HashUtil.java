@@ -1,4 +1,4 @@
-package com.github.xhea1.service.utils;
+package com.github.xhea1.stashtools.service.util;
 
 import com.google.common.io.Files;
 import com.google.common.hash.Hashing;

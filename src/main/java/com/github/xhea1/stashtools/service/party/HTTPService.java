@@ -1,8 +1,8 @@
-package com.github.xhea1.service.party;
+package com.github.xhea1.stashtools.service.party;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.xhea1.service.party.model.PostRecord;
+import com.github.xhea1.stashtools.model.party.PostRecord;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

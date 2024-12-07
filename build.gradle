@@ -41,7 +41,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.24.2'
 
     implementation 'info.picocli:picocli:4.7.6'
-    annotationProcessor 'info.picocli:picocli-codegen:4.7.4'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.6'
 
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'

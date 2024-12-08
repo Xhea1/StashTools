@@ -3,10 +3,15 @@ package com.github.xhea1.stashtools.service.util;
 import com.google.common.io.Files;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Utility class for hashing.
+ */
+@NullMarked
 public final class HashUtil {
 
     private HashUtil(){}

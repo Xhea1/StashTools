@@ -6,6 +6,9 @@ import com.github.xhea1.stashtools.model.party.PostRecord;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +19,9 @@ import java.util.List;
  * This service is specifically designed to query the `/search_hash/{file_hash}` endpoint
  * and extract the `posts` data, excluding nested fields like `file` and `attachments`.
  */
-public class HTTPService {
+@NullMarked
+public class PartyHTTPService {
+    private static final Logger logger = LogManager.getLogger(PartyHTTPService.class);
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String baseUrl;
@@ -26,7 +31,7 @@ public class HTTPService {
      *
      * @param baseUrl The base URL for the API endpoint.
      */
-    public HTTPService(String baseUrl) {
+    public PartyHTTPService(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
@@ -41,9 +46,7 @@ public class HTTPService {
         String url = baseUrl + "/search_hash/" + fileHash;
 
         // Create HTTP GET request
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
+        Request request = new Request.Builder().url(url).build();
 
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
@@ -70,6 +73,7 @@ public class HTTPService {
                 }
             }
         }
-        throw new IOException("Failed to retrieve posts or invalid response.");
+        logger.debug("Failed to retrieve posts or invalid response.");
+        return List.of();
     }
 }

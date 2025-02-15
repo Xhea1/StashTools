@@ -29,6 +29,23 @@ application {
 repositories {
     mavenCentral()
     google()
+    exclusiveContent {
+        forRepository {
+            maven {
+                url = uri('https://maven.pkg.github.com/Xhea1/party-tools')
+                credentials {
+                    username = 'Xhea1'
+                    /* there is currently no way to allow public access to a github maven package. Therefore
+               we use a personal access token with only the read:packages access */
+                    password = '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'
+                }
+            }
+        }
+        filter {
+            // this repository *only* contains artifacts with group "com.github.xhea1"
+            includeGroup 'com.github.xhea1'
+        }
+    }
 }
 
 dependencies {
@@ -45,6 +62,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.18.2'
 
     api "org.jspecify:jspecify:1.0.0"
+
+    // party tools
+    implementation 'com.github.xhea1:party-tools:0.1'
 
     // Testing dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'

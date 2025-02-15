@@ -1,8 +1,7 @@
 package com.github.xhea1.stashtools.service.processing;
 
-
-import com.github.xhea1.stashtools.model.party.PostRecord;
-import com.github.xhea1.stashtools.service.party.PartyHTTPService;
+import com.github.xhea1.partytools.service.PartyHTTPService;
+import com.github.xhea1.partytools.model.PostRecord;
 import com.github.xhea1.stashtools.service.stash.StashGraphQLService;
 import com.github.xhea1.stashtools.service.processing.tagging.TaggingService;
 import com.github.xhea1.stashtools.service.util.HashUtil;

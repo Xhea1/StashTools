@@ -1,6 +1,6 @@
 package com.github.xhea1.stashtools.app;
 
-import com.github.xhea1.stashtools.service.party.PartyHTTPService;
+import com.github.xhea1.partytools.service.PartyHTTPService;
 import com.github.xhea1.stashtools.service.processing.ProcessingService;
 import com.github.xhea1.stashtools.service.stash.StashGraphQLService;
 import org.apache.logging.log4j.LogManager;

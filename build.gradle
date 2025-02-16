@@ -58,7 +58,7 @@ dependencies {
     api "org.jspecify:jspecify:1.0.0"
 
     // party tools
-    implementation 'com.github.xhea1:party-tools:0.1'
+    implementation 'com.github.xhea1:party-tools:v0.1'
 
     // Testing dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'

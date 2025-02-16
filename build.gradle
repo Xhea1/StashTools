@@ -32,13 +32,7 @@ repositories {
     exclusiveContent {
         forRepository {
             maven {
-                url = uri('https://maven.pkg.github.com/Xhea1/party-tools')
-                credentials {
-                    /* there is currently no way to allow public access to a github maven package. Therefore
-                     you need to use a personal access token with only the read:packages access */
-                    username = System.getenv('GITHUB_ACTOR')
-                    password = System.getenv('GITHUB_TOKEN')
-                }
+                url = uri('https://jitpack.io')
             }
         }
         filter {

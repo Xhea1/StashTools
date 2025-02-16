@@ -34,10 +34,10 @@ repositories {
             maven {
                 url = uri('https://maven.pkg.github.com/Xhea1/party-tools')
                 credentials {
-                    username = 'Xhea1'
                     /* there is currently no way to allow public access to a github maven package. Therefore
-               we use a personal access token with only the read:packages access */
-                    password = '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'
+                     you need to use a personal access token with only the read:packages access */
+                    username = System.getenv('GITHUB_ACTOR')
+                    password = System.getenv('GITHUB_TOKEN')
                 }
             }
         }
@@ -89,9 +89,10 @@ tasks.register('downloadSchema') {
     }
 }
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import groovy.json.JsonSlurper;
+
+import groovy.json.JsonSlurper
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 // Task to download GraphQL types from GitHub dynamically
 tasks.register('downloadTypes') {
@@ -121,7 +122,7 @@ tasks.register('downloadTypes') {
                 if (file.type == "file" && file.name.endsWith(".graphql")) {
                     def fileUrl = file.download_url
                     // we need to ensure the type files have the .graphqls extension, otherwise plugins try to parse them as queries
-                    def destFile = new File(typesDir, file.name+'s')
+                    def destFile = new File(typesDir, file.name + 's')
                     logger.info("Downloading ${fileUrl} to ${destFile}")
                     ant.get(src: fileUrl, dest: destFile)
                 }

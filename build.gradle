@@ -44,7 +44,7 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    implementation 'com.google.guava:guava:33.4.5-jre'
+    implementation 'com.google.guava:guava:33.4.6-jre'
 
     implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
 

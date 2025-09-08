@@ -52,8 +52,8 @@ dependencies {
     annotationProcessor 'info.picocli:picocli-codegen:4.7.7'
 
     implementation 'com.squareup.okhttp3:okhttp:5.1.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.2'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.19.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.0'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.20.0'
 
     api "org.jspecify:jspecify:1.0.0"
 

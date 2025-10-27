@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.github.xhea1:party-tools:v0.1'
 
     // Testing dependencies
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter:6.0.0'
 }
 
 test {

@@ -53,7 +53,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.5'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.21'
 
-    api "org.jspecify:jspecify:1.0.0"
+    api "org.jspecify:jspecify:1.0.1"
 
     // party tools
     implementation 'com.github.xhea1:party-tools:v0.1'

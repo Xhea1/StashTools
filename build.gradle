@@ -51,7 +51,7 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:5.5.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.23.0'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.21'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.23'
 
     api "org.jspecify:jspecify:1.0.1"
 
